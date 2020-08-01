@@ -12,6 +12,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
+    //console.log(Connected successfully)
     startTrack();
   });
 
@@ -28,7 +29,8 @@ function startTrack () {
             "Add Employee",
             "Remove Employee",
             "Update Employee role",
-            "Update Employee Manager"
+            "Update Employee Manager",
+            "Exit"
          ]
         
   
@@ -63,10 +65,11 @@ function startTrack () {
             case "Update Employee Manager":
                  updateMng();
                  break;
-         }
-     })
 
+            case "Exit":
+                  connection.end();
+                  break;
+         };
+     });
 
-
-
-}
+};
