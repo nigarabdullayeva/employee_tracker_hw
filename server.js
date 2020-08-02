@@ -134,7 +134,7 @@ function viewEmployeeMng() {
         
     });
 
-}
+};
 
 function addEmployee() {
 
@@ -178,5 +178,35 @@ function addEmployee() {
         })
     })
 })
-}
-
+};
+function removeEmployee() {
+    connection.query("SELECT * FROM employee", function (err, employeeName) {
+      if (err) throw err;
+      var employeeIdArray = [];
+      for (var i = 0; i < employeeName.length; i++) {
+        employeeIdArray.push(`${employeeName[i].first_name}`);
+      }
+  
+      inquirer.prompt([
+        {
+          name: "name",
+          type: "list",
+          message: "Select the name of employee to remove !",
+          choices: employeeIdArray
+        }
+      ])
+        .then(function (answer) {
+  
+          connection.query("Delete from employee Where ?",
+            {
+              id: answer.id
+            },
+            function (err) {
+              if (err) throw err;
+              console.log("Employee was deleted successfully!");
+              startTrack();
+            }
+          );
+        });
+    });
+  };
