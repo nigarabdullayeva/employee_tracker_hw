@@ -26,7 +26,7 @@ function startTrack () {
          choices: [
             "View all employees",
             "View all employee by departments",
-            "View all employee by managers",
+            "View all employee by managers ID",
             "Add Employee",
             "Remove Employee",
             "Update Employee role",
@@ -47,7 +47,7 @@ function startTrack () {
                break;
 
 
-            case "View all employee by managers":
+            case "View all employee by managers ID":
                 viewEmployeeMng();
                 break;
             
@@ -85,7 +85,7 @@ function viewEmployee() {
 
    
 
- function viewEmployeeDept() {
+function viewEmployeeDept() {
      inquirer
      .prompt({
         name: "departments",
@@ -109,6 +109,31 @@ function viewEmployee() {
      });
 
     });
-     
 
- }
+};
+
+function viewEmployeeMng() {
+    inquirer
+    .prompt({
+       name: "managers",
+       type: "list",
+       message: "Please select manager id to see employees!",
+       choices: [
+          "2",
+          "7",
+          "8",
+          "null"
+       ]
+    }).then(function(answer){
+        connection.query("SELECT department.name, employee.id, first_name, last_name, title FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role. department_id = department.id WHERE manager_id= ?", answer.managers,
+        function(err,res){
+            if(err) throw err;
+            console.table(res);
+            startTrack()
+        });
+        
+    });
+
+}
+
+
