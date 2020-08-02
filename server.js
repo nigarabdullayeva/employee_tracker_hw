@@ -1,6 +1,7 @@
 var express = require("express");
 var mysql = require("mysql");
 var inquirer = require ("inquirer");
+var cTable = require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -36,7 +37,7 @@ function startTrack () {
   
      })
      .then(function(answer){
-         switch(answer.action){
+         switch(answer.actions){
            case "View all employees":
               viewEmployee();
               break;
@@ -73,3 +74,41 @@ function startTrack () {
      });
 
 };
+
+function viewEmployee() {
+   connection.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary, employee.manager_id FROM employee INNER JOIN role ON employee.role_id=role.id INNER JOIN department ON department.id=role.department_id;", function(err, res){
+        if (err) throw err;
+        console.table(res)
+        startTrack();
+    });
+};
+
+   
+
+ function viewEmployeeDept() {
+     inquirer
+     .prompt({
+        name: "departments",
+        type: "list",
+        message: "Please select department to search employees!",
+        choices: [
+           "Marketing",
+           "HR",
+           "IT",
+           "Sales",
+           "Customer Services"
+        ]
+
+     }).then(function(choices){
+        connection.query("SELECT department.name, employee.id, first_name, last_name, title FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role. department_id = department.id WHERE department.name = ?",choices.departments, 
+           function(err, res) {
+            if (err) throw err;
+            console.table(res);
+            startTrack()
+
+     });
+
+    });
+     
+
+ }

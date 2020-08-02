@@ -33,6 +33,10 @@ INSERT INTO role (id, title, salary, department_id)
 VALUES (9, "Sales Representative", 45000, 4);
 INSERT INTO role (id, title, salary, department_id)
 VALUES (10, "Customer Assistant", 45000, 5);
+INSERT INTO role (id, title, salary, department_id)
+VALUES (11, "Customer Specialist", 60000, 5);
+
+
 
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
 VALUES (1, "Carla", "Barbadosa", 1, 2);
@@ -47,15 +51,15 @@ VALUES (5, "Nadiya", "Simpson", 5, null);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
 VALUES (6, "Ahmad", "Hakan", 6, 7);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES (7, "Fred", "Jonson", 6, null);
+VALUES (7, "Fred", "Jonson", 7, null);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES (8, "Sheyla", "Abdu", 7, null);
+VALUES (8, "Sheyla", "Abdu", 8, null);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES (9, "Lana", "White", 8, null);
+VALUES (9, "Lana", "White", 9, null);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES (10, "John", "Smith", 9, 8);
+VALUES (10, "John", "Smith", 10, 8);
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
-VALUES (11, "Nika", "Hasan", 10, null);
+VALUES (11, "Nika", "Hasan", 11, 8);
 
 
 
