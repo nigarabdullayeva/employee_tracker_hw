@@ -29,8 +29,7 @@ function startTrack () {
             "View all employee by managers ID",
             "Add Employee",
             "Remove Employee",
-            "Update Employee role",
-            "Update Employee Manager",
+            "Update Employee role",,
             "Exit"
          ]
         
@@ -63,9 +62,6 @@ function startTrack () {
                  updateRole();
                  break;
 
-            case "Update Employee Manager":
-                 updateMng();
-                 break;
 
             case "Exit":
                   connection.end();
@@ -180,11 +176,11 @@ function addEmployee() {
 })
 };
 function removeEmployee() {
-    connection.query("SELECT * FROM employee", function (err, employeeName) {
+    connection.query("SELECT id, concat(first_name, ' ', last_name) fullName FROM employee", function (err, employeeName) {
       if (err) throw err;
-      var employeeIdArray = [];
+      var employeeNameArray = employeeName.map(employee => employee.id + " " + employee.fullName);
       for (var i = 0; i < employeeName.length; i++) {
-        employeeIdArray.push(`${employeeName[i].first_name}`);
+        employeeNameArray.push(`${employeeName[i].first_name}`);
       }
   
       inquirer.prompt([
@@ -192,12 +188,12 @@ function removeEmployee() {
           name: "name",
           type: "list",
           message: "Select the name of employee to remove !",
-          choices: employeeIdArray
+          choices: employeeNameArray
         }
       ])
         .then(function (answer) {
   
-          connection.query("Delete from employee Where ?",
+          connection.query("DELETE FROM employee WHERE ?",
             {
               id: answer.id
             },
@@ -210,3 +206,48 @@ function removeEmployee() {
         });
     });
   };
+
+function updateRole() {
+    connection.query("SELECT id, concat(first_name, ' ', last_name) fullName FROM employee", function (err, employeeName) {
+        connection.query("SELECT * FROM role", function (err, roleId) {
+        if (err) throw err;
+        var employeeNameArray = employeeName.map(employee => employee.id + " " + employee.fullName);
+        var roleArray = [];
+
+        for (var i = 0; i < employeeName.length; i++) {
+          employeeNameArray.push(`${employeeName[i].first_name}`);
+        }
+
+        for (var i = 0; i < roleId.length; i++) {
+          roleArray.push(`${roleId[i].id}`);
+        }
+
+          inquirer.prompt([
+            {
+              name: "name",
+              type: "list",
+              message: "Select the name of employee to update his role !",
+              choices: employeeNameArray
+            },
+            {
+              name: "roleId",
+              type: "list",
+              message: "What role you want to give for selected employee?",
+              choices: roleArray
+            }
+          ]).then(function(answer) {
+              connection.query("UPDATE employee SET ? WHERE ?",
+              [{ role_id:answer.roleId},
+            {
+                id:answer.employeeName
+            }], function(err) {
+                if(err) throw err;
+                console.table( "Employee's role was updated successfully!");
+                startTrack();
+            });
+          });
+        
+
+        });
+    });
+};
