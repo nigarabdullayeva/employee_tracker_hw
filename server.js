@@ -136,4 +136,47 @@ function viewEmployeeMng() {
 
 }
 
+function addEmployee() {
+
+    connection.query("SELECT role.id, role.title FROM role", function ( err, result) {
+        if(err) throw err;
+        let roleChoice =[];
+        for (var i = 0; i < result.length; i++) {
+            roleChoice.push(`${result[i].id}`);
+        };
+   
+    inquirer
+    .prompt([
+        {
+        name: "firstName",
+        type: "input",
+        message: "What is the first name of the employee?"
+        },
+        {
+         name: "lastName",
+         type: "input",
+         message: "What is the last name of the employee?"
+        },
+        {
+         name: "role",
+         type: "list",
+         message: "Please select employee's role id ?",
+         choices: roleChoice
+        },
+
+    ]).then(function(answer){
+        connection.query("INSERT INTO employee SET ?",
+        
+        { first_name: answer.firstName,
+          last_name: answer.lastName,
+          role_id: answer.role,
+          manager_id: null 
+        }, function(err, res) {
+            if(err) throw err;
+            console.table ("New employee was created successfully!")
+            startTrack();
+        })
+    })
+})
+}
 
